@@ -33,7 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </style>
 </head>
 <body>
-	<div class="title">Java开发身份信息自动录入系统</div>
+	<div class="title">木林杉身份信息自动录入系统</div>
 	<div class="content">
 		<div class="center" id="center">
 			<div class="show" id="show">
@@ -77,8 +77,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			e.preventDefault();//拖拽的时候阻止浏览器默认打开文件
 			//alert("你放了什么东西");//提示
 			//获取拖拽过来的图片上传到服务器
-			var formDate=new formData();
-			formDate.append("file",e.dataTransfer.files[0]);
+			var formData=new FormData();
+			formData.append("file",e.dataTransfer.files[0]);
 			//ajax异步上传
 			$.ajax({
 				//要把图片上传到什么地方
@@ -87,18 +87,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				type:"post",
 				cache: false,//不需要缓存
 				//上传什么东西
-				data:formDate,
+				data:formData,
 				processData: false,//表示不需要对数据进行处理
 				contentType:false,//不需要声明文件类型
 				//上传完毕后返回结果
-				success:function(date){
-				
+				success:function(data){
+					$("#img").attr({"src":'upload/'+data});
+					//解析图片
+					$.ajax({
+						type:"post",
+						url:"parse",
+						data:{"path":data},
+						dataType:"JSON",
+						success:function(data){
+							console.log(data),
+						}
+					});
 				}
 				
 			});
 		}
-		
-		
 		
         function scan(){
 			var box = $("#show");

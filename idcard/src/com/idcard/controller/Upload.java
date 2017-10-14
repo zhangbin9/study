@@ -37,7 +37,7 @@ public class Upload extends HttpServlet{
 					//构建文件上传对象
 					DiskFileItemFactory factory = new DiskFileItemFactory();
 					ServletFileUpload upload = new ServletFileUpload(factory);
-					//构建文件上传对象
+					//创建迭代器
 					Iterator<FileItem> items = upload.parseRequest(req).iterator();
 				while(items.hasNext()){
 					FileItem item = items.next();
@@ -50,13 +50,23 @@ public class Upload extends HttpServlet{
 					if(!file.exists()){
 						file.mkdirs();
 					}
+					//上传文件(自动生成返回值对象快捷键Alt+shift+L)
+					java.io.File uploadFile = new java.io.File(fileName+"/"+fileName);
+					item.write(uploadFile);
+					
 					
 				}
 			}
 			} catch (FileUploadException e) {
 				// TODO Auto-generated catch block
+				e.printStackTrace();//打印异常
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			//响应，将上传的文件返回前台页面
+			resp.getWriter().print(fileName);;
+			
 		}
 	}
 	
